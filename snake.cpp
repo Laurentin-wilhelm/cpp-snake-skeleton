@@ -53,22 +53,61 @@ std::vector<int> backgroundSetup(const int &nx, const int &ny)
 
 void add_snake(const std::vector<std::pair<int, int>> &snake, std::vector<int> &bg, int nx, int ny)
 {
-  // 👉️ Your code here 👈️
+  
+  for(auto &xy :snake)
+  {int x = xy.first;
+  int y = xy.second;
+  bg[y*nx+x] = 3;
+
+
+  }
+
 }
 
 void remove_snake(const std::vector<std::pair<int, int>> &snake, std::vector<int> &bg, int nx, int ny)
 {
-  // 👉️ Your code here 👈️
+ for(auto &xy :snake)
+  {int x = xy.first;
+  int y = xy.second;
+  bg[y*nx+x] = 0;
+  }
 }
 
 std::array<int, 2> snake_movement(char key)
-{
-  // 👉️ Your code here 👈️
+{ 
+  std::array<int, 2> u;
+  if(key =='z')
+  {
+    u[0]=0;
+    u[1]=-1;
+  }
+    if(key =='q')
+  {
+    u[0]=-1;
+    u[1]=0;
+  }
+    if(key =='s')
+  {
+    u[0]=0;
+    u[1]=1;
+  }
+    if(key =='d')
+  {
+    u[0]=1;
+    u[1]=0;
+  }
+  return u;
 }
 
 bool verifyBorder(const std::vector<std::pair<int, int>> &snake, int nx, int ny)
 {
-  // 👉️ Your code here 👈️
+  bool flag =false;
+  for(auto &xy :snake)
+  {int x = xy.first;
+  int y = xy.second;
+  flag = flag || x == 0 || y == 0 || x == nx-1 || y == ny-1;
+  }
+  return not flag;
 }
 
 std::vector<std::pair<int, int>> setupSnake(int snake_len)
@@ -84,8 +123,23 @@ std::vector<std::pair<int, int>> setupSnake(int snake_len)
 }
 
 void update_snake_coordinates(std::vector<std::pair<int, int>> &snake, bool eat, std::array<int, 2> dxdy)
-{
-  // 👉️ Your code here 👈️
+{ int i;
+  int snake_len = snake.size();
+  
+  std::pair<int, int> head(snake[0].first+dxdy[0],snake[0].second+dxdy[1]);
+   if(eat)
+  {
+    snake.push_back(snake.back());
+  }
+  for (int i = snake_len - 1; i > 0; i--)
+  {
+    snake[i] = snake[i-1];
+  }
+
+  
+  
+  snake[0] = head;
+  
 }
 
 void startGame(const int &lap, const int &nx, const int &ny, std::vector<std::pair<int, int>> &snake, std::vector<int> &bg)
@@ -109,7 +163,7 @@ void startGame(const int &lap, const int &nx, const int &ny, std::vector<std::pa
     bool out = verifyBorder(snake, nx, ny);
     if (out == false)
     {
-      std::cerr << "" << std::endl;
+      std::cerr << "Perdu💀💀" << std::endl;
       exit(1);
     }
     bool eat = internal::eatFood(food, snake);
